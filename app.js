@@ -12,12 +12,12 @@ const PIECE_OFFSET = CELL_HEIGHT * 0.1;
 const theme = {
   light: '#eeeed2',
   dark: '#769656',
-}
+};
 
 const pieceTheme = {
   light: '#FFFFFF',
   dark: '#000000',
-}
+};
 
 const pieces = {
   king: ['♚', '♔'],
@@ -26,7 +26,7 @@ const pieces = {
   bishop: ['♝', '♗'],
   knight: ['♞', '♘'],
   pawn: ['♟', '♙'],
-}
+};
 
 const $canvas = document.createElement('canvas');
 const ctx = $canvas.getContext('2d');
@@ -61,10 +61,10 @@ const renderBoard = () => {
         rectColor = theme.dark;
         textColor = theme.light;
       }
-      
+
       ctx.fillStyle = rectColor;
       ctx.fillRect(x * CELL_WIDTH, y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT);
-      
+
       // Draw debug position
       ctx.fillStyle = textColor;
       ctx.textBaseline = 'top';
@@ -80,60 +80,67 @@ const renderBoard = () => {
         ctx.textAlign = 'center';
         ctx.font = '72px Arial';
         ctx.fillStyle = piece.color;
-        ctx.fillText(piece.type[0], x * CELL_WIDTH + CELL_WIDTH / 2, y * CELL_HEIGHT + CELL_HEIGHT / 2 + PIECE_OFFSET);
+        ctx.fillText(
+          piece.type[0],
+          x * CELL_WIDTH + CELL_WIDTH / 2,
+          y * CELL_HEIGHT + CELL_HEIGHT / 2 + PIECE_OFFSET,
+        );
         ctx.fillStyle = pieceTheme.dark;
-        if (ctx.fillText(piece.type[1], x * CELL_WIDTH + CELL_WIDTH / 2, y * CELL_HEIGHT + CELL_HEIGHT / 2 + PIECE_OFFSET);
+        ctx.fillText(
+          piece.type[1],
+          x * CELL_WIDTH + CELL_WIDTH / 2,
+          y * CELL_HEIGHT + CELL_HEIGHT / 2 + PIECE_OFFSET,
+        );
       }
     }
   }
-}
+};
 
 // Ubicar las piezas
 for (let i = 0; i < RANKS; i += 1) {
   boardMatrix[i][1] = {
     type: pieces.pawn,
     color: pieceTheme.dark,
-  }
+  };
   boardMatrix[i][6] = {
     type: pieces.pawn,
     color: pieceTheme.light,
-  }
+  };
 }
 
 for (let i = 0; i < 2; i += 1) {
   boardMatrix[0][i * 7] = {
     type: pieces.rook,
     color: i ? pieceTheme.light : pieceTheme.dark,
-  }
+  };
   boardMatrix[7][i * 7] = {
     type: pieces.rook,
     color: i ? pieceTheme.light : pieceTheme.dark,
-  }
+  };
   boardMatrix[1][i * 7] = {
     type: pieces.bishop,
     color: i ? pieceTheme.light : pieceTheme.dark,
-  }
+  };
   boardMatrix[6][i * 7] = {
     type: pieces.bishop,
     color: i ? pieceTheme.light : pieceTheme.dark,
-  }
+  };
   boardMatrix[2][i * 7] = {
     type: pieces.knight,
     color: i ? pieceTheme.light : pieceTheme.dark,
-  }
+  };
   boardMatrix[5][i * 7] = {
     type: pieces.knight,
     color: i ? pieceTheme.light : pieceTheme.dark,
-  }
+  };
   boardMatrix[3][i * 7] = {
     type: pieces.queen,
     color: i ? pieceTheme.light : pieceTheme.dark,
-  }
+  };
   boardMatrix[4][i * 7] = {
     type: pieces.king,
     color: i ? pieceTheme.light : pieceTheme.dark,
-  }
+  };
 }
-
 
 renderBoard();
