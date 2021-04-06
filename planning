@@ -1,0 +1,19 @@
+Ajedrez Online
+
+
+- Front
+  - Tablero
+  - Fichas
+  - Logica de movimientos
+    - Legales
+    - Ilegales
+  - Maquina de estado
+  - A11y
+    - Jugadas con teclado
+    - Voz con jugadas
+
+- Back
+  - Setup Sockets
+  - Salas
+  - Deploy
+  - 
