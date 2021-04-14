@@ -3,7 +3,15 @@ Ajedrez Online
 
 - Front
   - Tablero
+    - Celda
+      - Seleccionar
+      - Celda de movimiento anterior
+      - Visualizar movimientos legales
+      - Visualizar una pieza
+      - Drag n Drop
+
   - Fichas
+    - 
   - Logica de movimientos
     - Legales
     - Ilegales
