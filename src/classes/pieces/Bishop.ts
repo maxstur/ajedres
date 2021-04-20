@@ -10,38 +10,38 @@ class Bishop extends Piece {
     const [x, y] = position;
     // Down Right
     for (let i = 1; i <= boardMatrix.length; i += 1) {
-      const cell = boardMatrix[x + i][y + i];
+      const cell = this.getCellFromCoords([x + i, y + i], boardMatrix);
       if (!cell) break;
-      if (cell.piece) break;
-      console.log(x, y, i, cell);
+      if (cell.piece && cell.piece.color === this.color) break;
       cell.setAvailableMovement(true);
+      if (cell.piece) break;
     }
 
     // Down Left
     for (let i = 1; i <= boardMatrix.length; i += 1) {
-      const cell = boardMatrix[x - i][y + i];
+      const cell = this.getCellFromCoords([x - i, y + i], boardMatrix);
       if (!cell) break;
-      if (cell.piece) break;
-      console.log(x, y, i, cell);
+      if (cell.piece && cell.piece.color === this.color) break;
       cell.setAvailableMovement(true);
+      if (cell.piece) break;
     }
 
     // Up Right
     for (let i = 1; i <= boardMatrix.length; i += 1) {
-      const cell = boardMatrix[x + i][y - i];
+      const cell = this.getCellFromCoords([x + i, y - i], boardMatrix);
       if (!cell) break;
-      if (cell.piece) break;
-      console.log(x, y, i, cell);
+      if (cell.piece && cell.piece.color === this.color) break;
       cell.setAvailableMovement(true);
+      if (cell.piece) break;
     }
 
     // Up Left
     for (let i = 1; i <= boardMatrix.length; i += 1) {
-      const cell = boardMatrix[x - i][y - i];
+      const cell = this.getCellFromCoords([x - i, y - i], boardMatrix);
       if (!cell) break;
-      if (cell.piece) break;
-      console.log(x, y, i, cell);
+      if (cell.piece && cell.piece.color === this.color) break;
       cell.setAvailableMovement(true);
+      if (cell.piece) break;
     }
   }
 }
