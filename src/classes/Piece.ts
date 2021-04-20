@@ -21,6 +21,18 @@ class Piece {
     return cell;
   }
 
+  checkDirection(position, direction, boardMatrix) {
+    const [x, y] = position;
+    const [xDir, yDir] = direction;
+    for (let i = 1; i <= boardMatrix.length; i += 1) {
+      const cell = this.getCellFromCoords([x + (i * xDir), y + (i * yDir)], boardMatrix);
+      if (!cell) break;
+      if (cell.piece && cell.piece.color === this.color) break;
+      cell.setAvailableMovement(true);
+      if (cell.piece) break;
+    }
+  }
+
   // eslint-disable-next-line no-unused-vars
   availableMovements(position: [number, number], boardMatrix: Cell[][]) {
     throw new Error(`Missing availableMovements in ${this.type}`);
