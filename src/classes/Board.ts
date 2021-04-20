@@ -227,7 +227,7 @@ class Board {
 
         if (cell.availableMove) {
           this.ctx.fillStyle = '#000000';
-          this.ctx.globalAlpha = 0.3;
+          this.ctx.globalAlpha = 0.15;
           this.ctx.beginPath();
           this.ctx.arc(
             drawX * this.cellWidth + this.cellWidth / 2,
