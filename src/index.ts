@@ -35,10 +35,10 @@ for (let i = 0; i < RANKS; i += 1) {
 for (let i = 0; i < 2; i += 1) {
   board.initPlacePiece(0, i * 7, new Rook(i ? Color.light : Color.dark));
   board.initPlacePiece(7, i * 7, new Rook(i ? Color.light : Color.dark));
-  board.initPlacePiece(1, i * 7, new Bishop(i ? Color.light : Color.dark));
-  board.initPlacePiece(6, i * 7, new Bishop(i ? Color.light : Color.dark));
-  board.initPlacePiece(2, i * 7, new Knight(i ? Color.light : Color.dark));
-  board.initPlacePiece(5, i * 7, new Knight(i ? Color.light : Color.dark));
+  board.initPlacePiece(1, i * 7, new Knight(i ? Color.light : Color.dark));
+  board.initPlacePiece(6, i * 7, new Knight(i ? Color.light : Color.dark));
+  board.initPlacePiece(2, i * 7, new Bishop(i ? Color.light : Color.dark));
+  board.initPlacePiece(5, i * 7, new Bishop(i ? Color.light : Color.dark));
   board.initPlacePiece(3, i * 7, new Queen(i ? Color.light : Color.dark));
   board.initPlacePiece(4, i * 7, new King(i ? Color.light : Color.dark));
 }
