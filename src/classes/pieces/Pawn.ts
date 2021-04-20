@@ -26,7 +26,8 @@ class Pawn extends Piece {
         boardMatrix,
       );
       if (
-        takeCell.piece
+        takeCell
+        && takeCell.piece
         && takeCell.piece.color !== this.color
       ) takeCell.setAvailableMovement(true);
     }
