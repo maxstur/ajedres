@@ -209,24 +209,19 @@ class Board {
           this.cellHeight,
         );
 
-        // Draw debug position
-        this.ctx.fillStyle = textColor;
-        this.ctx.textBaseline = 'top';
-        this.ctx.textAlign = 'start';
-        this.ctx.font = '8px Arial';
-        this.ctx.fillText(`[${x};${y}]`, drawX * this.cellWidth + 10, drawY * this.cellHeight + 10);
-
         // Draw the piece
         const cell = this.boardMatrix[x][y];
 
         if (cell.selected) {
           this.ctx.fillStyle = '#FFDC4E';
+          this.ctx.globalAlpha = 0.8;
           this.ctx.fillRect(
             drawX * this.cellWidth,
             drawY * this.cellHeight,
             this.cellWidth,
             this.cellHeight,
           );
+          this.ctx.globalAlpha = 1;
         }
 
         if (cell.availableMove) {
@@ -243,6 +238,13 @@ class Board {
           this.ctx.fill();
           this.ctx.globalAlpha = 1;
         }
+
+        // Draw debug position
+        this.ctx.fillStyle = textColor;
+        this.ctx.textBaseline = 'top';
+        this.ctx.textAlign = 'start';
+        this.ctx.font = '8px Arial';
+        this.ctx.fillText(`[${x};${y}]`, drawX * this.cellWidth + 10, drawY * this.cellHeight + 10);
 
         const piece = cell?.piece;
 
