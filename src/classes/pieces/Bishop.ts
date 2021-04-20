@@ -6,43 +6,30 @@ class Bishop extends Piece {
   constructor(color) {
     super(color, ['♝', '♗'], PieceType.bishop);
   }
-  availableMovements(position: [number, number], boardMatrix: Cell[][]) {
+
+  checkDiagonal(position, movement, boardMatrix) {
     const [x, y] = position;
-    // Down Right
+    const [xMov, yMov] = movement;
     for (let i = 1; i <= boardMatrix.length; i += 1) {
-      const cell = this.getCellFromCoords([x + i, y + i], boardMatrix);
+      const cell = this.getCellFromCoords([x + (i * xMov), y + (i * yMov)], boardMatrix);
       if (!cell) break;
       if (cell.piece && cell.piece.color === this.color) break;
       cell.setAvailableMovement(true);
       if (cell.piece) break;
     }
+  }
+  availableMovements(position: [number, number], boardMatrix: Cell[][]) {
+    // Down Right
+    this.checkDiagonal(position, [1, 1], boardMatrix);
 
     // Down Left
-    for (let i = 1; i <= boardMatrix.length; i += 1) {
-      const cell = this.getCellFromCoords([x - i, y + i], boardMatrix);
-      if (!cell) break;
-      if (cell.piece && cell.piece.color === this.color) break;
-      cell.setAvailableMovement(true);
-      if (cell.piece) break;
-    }
+    this.checkDiagonal(position, [-1, 1], boardMatrix);
 
     // Up Right
-    for (let i = 1; i <= boardMatrix.length; i += 1) {
-      const cell = this.getCellFromCoords([x + i, y - i], boardMatrix);
-      if (!cell) break;
-      if (cell.piece && cell.piece.color === this.color) break;
-      cell.setAvailableMovement(true);
-      if (cell.piece) break;
-    }
+    this.checkDiagonal(position, [1, -1], boardMatrix);
 
     // Up Left
-    for (let i = 1; i <= boardMatrix.length; i += 1) {
-      const cell = this.getCellFromCoords([x - i, y - i], boardMatrix);
-      if (!cell) break;
-      if (cell.piece && cell.piece.color === this.color) break;
-      cell.setAvailableMovement(true);
-      if (cell.piece) break;
-    }
+    this.checkDiagonal(position, [-1, -1], boardMatrix);
   }
 }
 
