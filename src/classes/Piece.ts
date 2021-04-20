@@ -33,6 +33,10 @@ class Piece {
     }
   }
 
+  validCell(cell: Cell): boolean {
+    return cell && !(cell.piece && cell.piece.color === this.color);
+  }
+
   // eslint-disable-next-line no-unused-vars
   availableMovements(position: [number, number], boardMatrix: Cell[][]) {
     throw new Error(`Missing availableMovements in ${this.type}`);

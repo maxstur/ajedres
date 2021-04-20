@@ -23,7 +23,7 @@ class Knight extends Piece {
 
     possibleMovements.forEach((pm) => {
       const cell = this.getCellFromCoords(pm, boardMatrix);
-      if (cell && !(cell.piece && cell.piece.color === this.color)) cell.setAvailableMovement(true);
+      if (this.validCell(cell)) cell.setAvailableMovement(true);
     });
   }
 }
