@@ -34,7 +34,8 @@
     "no-restricted-syntax": "off",
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"],
-    "no-bitwise": "off"
+    "no-bitwise": "off",
+    "class-methods-use-this": "off"
   },
   "overrides": [
     {

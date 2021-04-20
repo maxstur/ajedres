@@ -1,5 +1,12 @@
 import Board from './classes/Board';
-import Piece from './classes/Piece';
+import Pawn from './classes/pieces/Pawn';
+import Rook from './classes/pieces/Rook';
+import Knight from './classes/pieces/Knight';
+import Bishop from './classes/pieces/Bishop';
+import Queen from './classes/pieces/Queen';
+import King from './classes/pieces/King';
+
+import { Color } from './types';
 
 const WIDTH = 800;
 const HEIGHT = 800;
@@ -19,30 +26,21 @@ const pieceTheme = {
 
 const board = new Board(WIDTH, HEIGHT, FILES, RANKS, theme, pieceTheme);
 
-const pieces = {
-  king: ['♚', '♔'],
-  queen: ['♛', '♕'],
-  rook: ['♜', '♖'],
-  bishop: ['♝', '♗'],
-  knight: ['♞', '♘'],
-  pawn: ['♟', '♙'],
-};
-
 // Ubicar las piezas
 for (let i = 0; i < RANKS; i += 1) {
-  board.initPlacePiece(i, 1, new Piece(pieces.pawn, pieceTheme.dark));
-  board.initPlacePiece(i, 6, new Piece(pieces.pawn, pieceTheme.light));
+  board.initPlacePiece(i, 1, new Pawn(Color.dark));
+  board.initPlacePiece(i, 6, new Pawn(Color.light));
 }
 
 for (let i = 0; i < 2; i += 1) {
-  board.initPlacePiece(0, i * 7, new Piece(pieces.rook, i ? pieceTheme.light : pieceTheme.dark));
-  board.initPlacePiece(7, i * 7, new Piece(pieces.rook, i ? pieceTheme.light : pieceTheme.dark));
-  board.initPlacePiece(1, i * 7, new Piece(pieces.bishop, i ? pieceTheme.light : pieceTheme.dark));
-  board.initPlacePiece(6, i * 7, new Piece(pieces.bishop, i ? pieceTheme.light : pieceTheme.dark));
-  board.initPlacePiece(2, i * 7, new Piece(pieces.knight, i ? pieceTheme.light : pieceTheme.dark));
-  board.initPlacePiece(5, i * 7, new Piece(pieces.knight, i ? pieceTheme.light : pieceTheme.dark));
-  board.initPlacePiece(3, i * 7, new Piece(pieces.queen, i ? pieceTheme.light : pieceTheme.dark));
-  board.initPlacePiece(4, i * 7, new Piece(pieces.king, i ? pieceTheme.light : pieceTheme.dark));
+  board.initPlacePiece(0, i * 7, new Rook(i ? Color.light : Color.dark));
+  board.initPlacePiece(7, i * 7, new Rook(i ? Color.light : Color.dark));
+  board.initPlacePiece(1, i * 7, new Bishop(i ? Color.light : Color.dark));
+  board.initPlacePiece(6, i * 7, new Bishop(i ? Color.light : Color.dark));
+  board.initPlacePiece(2, i * 7, new Knight(i ? Color.light : Color.dark));
+  board.initPlacePiece(5, i * 7, new Knight(i ? Color.light : Color.dark));
+  board.initPlacePiece(3, i * 7, new Queen(i ? Color.light : Color.dark));
+  board.initPlacePiece(4, i * 7, new King(i ? Color.light : Color.dark));
 }
 
 board.render();

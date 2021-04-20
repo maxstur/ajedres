@@ -3,10 +3,12 @@ import Piece from './Piece';
 class Cell {
   piece: Piece;
   selected: boolean;
+  availableMove: boolean;
 
   constructor(piece: Piece) {
     this.piece = piece;
     this.selected = false;
+    this.availableMove = false;
   }
 
   setSelected(selected: boolean) {
@@ -15,6 +17,10 @@ class Cell {
 
   setPiece(piece: Piece) {
     this.piece = piece;
+  }
+
+  setAvailableMovement(available: boolean) {
+    this.availableMove = available;
   }
 }
 
