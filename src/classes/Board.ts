@@ -92,6 +92,7 @@ class Board {
 
   pickPiece(event: MouseEvent) {
     this.clearSelections();
+    this.clearAvailableMoves();
     if (this.previousCell) return;
     const { offsetX, offsetY } = event;
     const [file, rank] = this.mouseCoordinatesToCell(offsetX, offsetY);
