@@ -1,5 +1,6 @@
 import Cell from './Cell';
-import { Theme } from '../types';
+import { PieceType, Theme } from '../types';
+import King from './pieces/King';
 
 class Board {
   width: number;
@@ -131,7 +132,15 @@ class Board {
       return;
     }
 
+    if (this.previousCell.piece.type === PieceType.king) {
+      const kingPiece = this.previousCell.piece as King;
+      if (!kingPiece.moved || kingPiece.isCastling([file, rank])) {
+        kingPiece.castle([file, rank], this.boardMatrix);
+      }
+    }
+
     selectedCell.setPiece(this.previousCell.piece);
+
     this.selectedCells.push(selectedCell);
 
     this.previousCell.piece.moved = true;

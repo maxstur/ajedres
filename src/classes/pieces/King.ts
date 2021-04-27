@@ -7,6 +7,24 @@ class King extends Piece {
     super(color, ['♚', '♔'], PieceType.king);
   }
 
+  isCastling(position: [number, number]) {
+    const [x, y] = position;
+    return (y === 7 && (x === 6 || x === 2));
+  }
+
+  castle(position: [number, number], boardMatrix: Cell[][]) {
+    const [x] = position;
+    if (x === 6) {
+      const rookCell = boardMatrix[7][7];
+      boardMatrix[5][7].setPiece(rookCell.piece);
+      rookCell.setPiece(null);
+    } else if (x === 2) {
+      const rookCell = boardMatrix[0][7];
+      boardMatrix[3][7].setPiece(rookCell.piece);
+      rookCell.setPiece(null);
+    }
+  }
+
   availableMovements(position: [number, number], boardMatrix: Cell[][]) {
     const [x, y] = position;
     const directions = [
