@@ -32,7 +32,7 @@ class King extends Piece {
     const cellCastlingKingSide2 = this.getCellFromCoords([x + 2, y], boardMatrix);
     const cellCastlingKingSideRook = this.getCellFromCoords([x + 3, y], boardMatrix);
     if (
-      !cellCastlingKingSide1.piece // mal
+      !cellCastlingKingSide1.piece
       && !cellCastlingKingSide2.piece
       && cellCastlingKingSideRook.piece
       && cellCastlingKingSideRook.piece.type === PieceType.rook
