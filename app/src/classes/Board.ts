@@ -2,6 +2,8 @@ import Cell from './Cell';
 import { PieceType, Theme } from '../types';
 import King from './pieces/King';
 
+import socket from '../helpers/socket';
+
 class Board {
   width: number;
   height: number;
@@ -150,6 +152,8 @@ class Board {
 
     // this.flip = !this.flip;
     this.clearAvailableMoves();
+
+    socket.emit('test');
 
     this.render();
   }

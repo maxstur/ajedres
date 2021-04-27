@@ -22,6 +22,11 @@ Ajedrez Online
 
 - Back
   - Setup Sockets
+  - Game Logic
+    - Setup del Tablero
+    - Cliente informa movimiento
+    - Servidor valida movimiento e informa a los clientes
+    - Servidor informa a quién le toca
   - Salas
   - Deploy
   - 
