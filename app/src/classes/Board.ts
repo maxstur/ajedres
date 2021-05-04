@@ -19,6 +19,7 @@ class Board {
 
   flip: boolean;
 
+  previousCellXY: [number, number] | null;
   previousCell: Cell;
   selectedCells: Cell[];
 
@@ -41,6 +42,7 @@ class Board {
     this.pieceOffset = this.cellHeight * 0.1;
 
     this.previousCell = null;
+    this.previousCellXY = null;
     this.selectedCells = [];
 
     this.$canvas = document.createElement('canvas');
@@ -72,6 +74,7 @@ class Board {
     this.pickPiece = this.pickPiece.bind(this);
     this.dragPiece = this.dragPiece.bind(this);
     this.dropPiece = this.dropPiece.bind(this);
+    this.onSocketMove = this.onSocketMove.bind(this);
 
     // Mouse events
     this.$canvas.addEventListener('mousemove', this.dragPiece);
@@ -79,6 +82,36 @@ class Board {
     this.$canvas.addEventListener('mousedown', this.pickPiece);
 
     this.$canvas.addEventListener('mouseup', this.dropPiece);
+
+    // Socket events
+
+    socket.on('move', this.onSocketMove);
+  }
+
+  onSocketMove([prev, next]) {
+    const [xPrev, yPrev] = prev;
+    const [xNext, yNext] = next;
+
+    console.log({
+      xPrev, yPrev, xNext, yNext,
+    });
+
+    const selectedCell = this.boardMatrix[xNext][yNext];
+    const previousCell = this.boardMatrix[xPrev][yPrev];
+
+    selectedCell.setPiece(previousCell.piece);
+
+    this.selectedCells.push(selectedCell);
+
+    previousCell.piece.moved = true;
+    previousCell.setPiece(null);
+    this.previousCell = null;
+    selectedCell.setSelected(true);
+
+    // this.flip = !this.flip;
+
+    this.clearAvailableMoves();
+    this.render();
   }
 
   clearSelections() {
@@ -104,6 +137,7 @@ class Board {
 
     selectedCell.piece.availableMovements([file, rank], this.boardMatrix);
 
+    this.previousCellXY = [file, rank];
     this.previousCell = selectedCell;
     this.selectedCells.push(selectedCell);
     selectedCell.setSelected(true);
@@ -134,28 +168,7 @@ class Board {
       return;
     }
 
-    if (this.previousCell.piece.type === PieceType.king) {
-      const kingPiece = this.previousCell.piece as King;
-      if (!kingPiece.moved || kingPiece.isCastling([file, rank])) {
-        kingPiece.castle([file, rank], this.boardMatrix);
-      }
-    }
-
-    selectedCell.setPiece(this.previousCell.piece);
-
-    this.selectedCells.push(selectedCell);
-
-    this.previousCell.piece.moved = true;
-    this.previousCell.setPiece(null);
-    this.previousCell = null;
-    selectedCell.setSelected(true);
-
-    // this.flip = !this.flip;
-    this.clearAvailableMoves();
-
-    socket.emit('test');
-
-    this.render();
+    socket.emit('move', [this.previousCellXY, [file, rank]]);
   }
 
   mouseCoordinatesToCell(x: number, y: number) {

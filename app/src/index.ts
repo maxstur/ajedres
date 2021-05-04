@@ -6,6 +6,8 @@ import Bishop from './classes/pieces/Bishop';
 import Queen from './classes/pieces/Queen';
 import King from './classes/pieces/King';
 
+import socket from './helpers/socket';
+
 import { Color, PieceType } from './types';
 
 const WIDTH = 800;
@@ -26,36 +28,27 @@ const pieceTheme = {
 
 const board = new Board(WIDTH, HEIGHT, FILES, RANKS, theme, pieceTheme);
 
-const serverPieces = [
-  ['br', 'bn', 'bb', 'bq', 'bk', 'bb', 'bn', 'br'],
-  ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
-  [null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null],
-  ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
-  ['wr', 'wn', 'wb', 'wq', 'wk', 'wb', 'wn', 'wr'],
-];
+socket.on('init board', (serverPieces) => {
+  serverPieces.forEach((rank, y) => {
+    rank.forEach((p, x) => {
+      if (!p) return;
+      const [colorType, pieceType = ''] = p.split('');
+      const color = colorType === 'b' ? Color.dark : Color.light;
 
-serverPieces.forEach((rank, y) => {
-  rank.forEach((p, x) => {
-    if (!p) return;
-    const [colorType, pieceType = ''] = p.split('');
-    const color = colorType === 'b' ? Color.dark : Color.light;
+      console.log({ pieceType });
 
-    console.log({ pieceType });
+      let piece;
 
-    let piece;
+      if (pieceType === PieceType.pawn) piece = new Pawn(color);
+      else if (pieceType === PieceType.rook) piece = new Rook(color);
+      else if (pieceType === PieceType.knight) piece = new Knight(color);
+      else if (pieceType === PieceType.bishop) piece = new Bishop(color);
+      else if (pieceType === PieceType.queen) piece = new Queen(color);
+      else if (pieceType === PieceType.king) piece = new King(color);
 
-    if (pieceType === PieceType.pawn) piece = new Pawn(color);
-    else if (pieceType === PieceType.rook) piece = new Rook(color);
-    else if (pieceType === PieceType.knight) piece = new Knight(color);
-    else if (pieceType === PieceType.bishop) piece = new Bishop(color);
-    else if (pieceType === PieceType.queen) piece = new Queen(color);
-    else if (pieceType === PieceType.king) piece = new King(color);
-
-    board.initPlacePiece(x, y, piece);
+      board.initPlacePiece(x, y, piece);
+    });
   });
-});
 
-board.render();
+  board.render();
+});
