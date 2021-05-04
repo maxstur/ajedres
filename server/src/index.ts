@@ -1,7 +1,7 @@
 import { createServer } from 'http';
-import { Server, Socket } from 'socket.io';
+import { Server, Socket as SocketBase } from 'socket.io';
 
-const serverPieces = [
+const initialBoard = [
   ['br', 'bn', 'bb', 'bq', 'bk', 'bb', 'bn', 'br'],
   ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
   [null, null, null, null, null, null, null, null],
@@ -11,6 +11,17 @@ const serverPieces = [
   ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
   ['wr', 'wn', 'wb', 'wq', 'wk', 'wb', 'wn', 'wr'],
 ];
+
+interface Socket extends SocketBase {
+  roomId?: string,
+}
+
+interface Room {
+  board: (string | null)[][];
+  players: Socket[],
+}
+
+const rooms: Record<string, Room> = {};
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -22,23 +33,48 @@ const io = new Server(httpServer, {
 
 io.on('connection', (socket: Socket) => {
   console.log('Socket connected!');
-  socket.emit('connected', 'hello!');
 
-  socket.emit('init board', serverPieces);
+  socket.emit('connected');
 
-  socket.on('test', () => {
-    console.log('algo');
+  socket.on('join room', (roomId) => {
+    socket.roomId = roomId;
+
+    if (!rooms[roomId]) {
+      rooms[roomId] = {
+        board: JSON.parse(JSON.stringify(initialBoard)),
+        players: [],
+      };
+    }
+
+    rooms[roomId].players.push(socket);
+    socket.join(roomId);
+
+    socket.emit('init board', rooms[roomId].board);
   });
 
   socket.on('move', ([prev, next]) => {
-    console.log({ prev, next });
+    const { roomId } = socket;
+    if (!roomId) return;
+
+    const room = rooms[roomId];
     const [xNext, yNext] = next;
     const [xPrev, yPrev] = prev;
 
-    serverPieces[yNext][xNext] = serverPieces[yPrev][xPrev];
-    serverPieces[yPrev][xPrev] = null;
+    if (!room) return;
 
-    io.emit('move', [prev, next]);
+    room.board[yNext][xNext] = room.board[yPrev][xPrev];
+    room.board[yPrev][xPrev] = null;
+
+    io.to(roomId).emit('move', [prev, next]);
+  });
+
+  socket.on('disconnecting', () => {
+    const socketRooms = [...socket.rooms];
+    socketRooms.forEach((r) => {
+      if (!rooms[r]) return;
+      rooms[r].players = rooms[r].players.filter((p) => p !== socket);
+      io.to(r).emit('player left');
+    });
   });
 });
 
