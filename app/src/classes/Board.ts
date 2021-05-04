@@ -1,5 +1,5 @@
 import Cell from './Cell';
-import { PieceType, Theme } from '../types';
+import { Color, PieceType, Theme } from '../types';
 import King from './pieces/King';
 
 import socket from '../helpers/socket';
@@ -17,7 +17,8 @@ class Board {
   pieceOffset: number;
   boardMatrix: Cell[][];
 
-  flip: boolean;
+  disabled: boolean;
+  isBlack: boolean;
 
   previousCellXY: [number, number] | null;
   previousCell: Cell;
@@ -34,7 +35,8 @@ class Board {
     this.theme = theme;
     this.pieceTheme = pieceTheme;
 
-    this.flip = false;
+    this.disabled = true;
+    this.isBlack = false;
 
     this.cellWidth = this.width / this.files;
     this.cellHeight = this.height / this.ranks;
@@ -75,6 +77,8 @@ class Board {
     this.dragPiece = this.dragPiece.bind(this);
     this.dropPiece = this.dropPiece.bind(this);
     this.onSocketMove = this.onSocketMove.bind(this);
+    this.onSocketTeToca = this.onSocketTeToca.bind(this);
+    this.onSocketSosBlack = this.onSocketSosBlack.bind(this);
 
     // Mouse events
     this.$canvas.addEventListener('mousemove', this.dragPiece);
@@ -86,6 +90,8 @@ class Board {
     // Socket events
 
     socket.on('move', this.onSocketMove);
+    socket.on('te toca', this.onSocketTeToca);
+    socket.on('sos black', this.onSocketSosBlack);
   }
 
   onSocketMove([prev, next]) {
@@ -108,9 +114,18 @@ class Board {
     this.previousCell = null;
     selectedCell.setSelected(true);
 
-    // this.flip = !this.flip;
+    this.disabled = true;
 
     this.clearAvailableMoves();
+    this.render();
+  }
+
+  onSocketTeToca() {
+    this.disabled = false;
+  }
+
+  onSocketSosBlack() {
+    this.isBlack = true;
     this.render();
   }
 
@@ -127,6 +142,7 @@ class Board {
   }
 
   pickPiece(event: MouseEvent) {
+    if (this.disabled) return;
     this.clearSelections();
     this.clearAvailableMoves();
     if (this.previousCell) return;
@@ -134,6 +150,8 @@ class Board {
     const [file, rank] = this.mouseCoordinatesToCell(offsetX, offsetY);
     const selectedCell = this.boardMatrix[file][rank];
     if (!selectedCell.piece) return;
+    if (this.isBlack && selectedCell.piece.color === Color.light) return;
+    if (!this.isBlack && selectedCell.piece.color === Color.dark) return;
 
     selectedCell.piece.availableMovements([file, rank], this.boardMatrix);
 
@@ -175,7 +193,7 @@ class Board {
     let file = Math.floor(x / this.cellWidth);
     let rank = Math.floor(y / this.cellHeight);
 
-    if (this.flip) {
+    if (this.isBlack) {
       file = this.files - 1 - file;
       rank = this.ranks - 1 - rank;
     }
@@ -216,7 +234,7 @@ class Board {
         let drawX = x;
         let drawY = y;
 
-        if (this.flip) {
+        if (this.isBlack) {
           drawX = this.ranks - 1 - drawX;
           drawY = this.files - 1 - drawY;
         }

@@ -19,6 +19,7 @@ interface Socket extends SocketBase {
 interface Room {
   board: (string | null)[][];
   players: Socket[],
+  current: number;
 }
 
 const rooms: Record<string, Room> = {};
@@ -43,6 +44,7 @@ io.on('connection', (socket: Socket) => {
       rooms[roomId] = {
         board: JSON.parse(JSON.stringify(initialBoard)),
         players: [],
+        current: 0,
       };
     }
 
@@ -50,6 +52,18 @@ io.on('connection', (socket: Socket) => {
     socket.join(roomId);
 
     socket.emit('init board', rooms[roomId].board);
+
+    if (rooms[roomId].players.length === 2) {
+      const { players } = rooms[roomId];
+      if (Math.random() > 0.5) {
+        rooms[roomId].current = 1;
+        players[1].emit('te toca');
+        players[0].emit('sos black');
+      } else {
+        players[0].emit('te toca');
+        players[1].emit('sos black');
+      }
+    }
   });
 
   socket.on('move', ([prev, next]) => {
@@ -66,6 +80,10 @@ io.on('connection', (socket: Socket) => {
     room.board[yPrev][xPrev] = null;
 
     io.to(roomId).emit('move', [prev, next]);
+
+    room.current = room.current ? 0 : 1;
+
+    room.players[room.current].emit('te toca');
   });
 
   socket.on('disconnecting', () => {
