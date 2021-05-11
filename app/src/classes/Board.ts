@@ -108,7 +108,7 @@ class Board {
     this.selectedCells.push(selectedCell);
     this.selectedCells.push(previousCell);
 
-    previousCell.piece.moved = true;
+    previousCell.piece.moveCount += 1;
     previousCell.setPiece(null);
     previousCell.setSelected(true);
     this.previousCell = null;

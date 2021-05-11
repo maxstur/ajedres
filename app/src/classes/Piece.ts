@@ -5,13 +5,13 @@ class Piece {
   color: Color;
   miau: string[];
   type: PieceType;
-  moved: boolean;
+  moveCount: number;
 
   constructor(color, miau, type) {
     this.color = color;
     this.miau = miau;
     this.type = type;
-    this.moved = false;
+    this.moveCount = 0;
   }
 
   getCellFromCoords(position: [number, number], boardMatrix: Cell[][]): Cell | null {

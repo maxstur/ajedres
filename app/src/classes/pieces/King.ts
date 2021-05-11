@@ -44,7 +44,7 @@ class King extends Piece {
       if (this.validCell(cell)) cell.setAvailableMovement(true);
     });
 
-    if (this.moved) return;
+    if (this.moveCount > 0) return;
 
     const cellCastlingKingSide1 = this.getCellFromCoords([x + 1, y], boardMatrix);
     const cellCastlingKingSide2 = this.getCellFromCoords([x + 2, y], boardMatrix);
@@ -54,7 +54,7 @@ class King extends Piece {
       && !cellCastlingKingSide2.piece
       && cellCastlingKingSideRook.piece
       && cellCastlingKingSideRook.piece.type === PieceType.rook
-      && !cellCastlingKingSideRook.piece.moved
+      && cellCastlingKingSideRook.piece.moveCount === 0
     ) {
       cellCastlingKingSide2.setAvailableMovement(true);
     }
@@ -69,7 +69,7 @@ class King extends Piece {
       && !cellCastlingQueenSide3.piece
       && cellCastlingQueenSideRook.piece
       && cellCastlingQueenSideRook.piece.type === PieceType.rook
-      && !cellCastlingQueenSideRook.piece.moved
+      && cellCastlingQueenSideRook.piece.moveCount === 0
     ) {
       cellCastlingQueenSide2.setAvailableMovement(true);
     }
