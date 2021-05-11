@@ -106,6 +106,7 @@ class Board {
     selectedCell.setPiece(previousCell.piece);
 
     this.selectedCells.push(selectedCell);
+    this.selectedCells.push(previousCell);
 
     previousCell.piece.moved = true;
     previousCell.setPiece(null);
@@ -132,6 +133,7 @@ class Board {
     this.selectedCells.forEach((c) => c.setSelected(false));
     this.selectedCells = [];
   }
+
   clearAvailableMoves() {
     this.boardMatrix.forEach((file) => {
       file.forEach((cell) => {
