@@ -38,7 +38,7 @@ const io = new Server(httpServer, {
 });
 
 io.on('connection', (socket: Socket) => {
-  console.log('Socket connected!');
+  console.log(`Socket connected: ${socket.id}`);
 
   socket.emit('connected');
 
@@ -46,6 +46,7 @@ io.on('connection', (socket: Socket) => {
     socket.roomId = roomId;
 
     if (!rooms[roomId]) {
+      console.log(`[${roomId}] Room created`);
       rooms[roomId] = {
         board: JSON.parse(JSON.stringify(initialBoard)),
         players: [],
@@ -59,12 +60,15 @@ io.on('connection', (socket: Socket) => {
     socket.emit('init board', rooms[roomId].board);
 
     if (rooms[roomId].players.length === 2) {
+      console.log(`[${roomId}] Match started`);
       const { players } = rooms[roomId];
       if (Math.random() > 0.5) {
+        console.log(`[${roomId}] Turn: Player 2`);
         rooms[roomId].current = 1;
         players[1].emit('te toca');
         players[0].emit('sos black');
       } else {
+        console.log(`[${roomId}] Turn: Player 1`);
         players[0].emit('te toca');
         players[1].emit('sos black');
       }
@@ -81,6 +85,8 @@ io.on('connection', (socket: Socket) => {
 
     if (!room) return;
 
+    console.log(`[${roomId}] Movement ${prev}, ${next}`);
+
     room.board[yNext][xNext] = room.board[yPrev][xPrev];
     room.board[yPrev][xPrev] = null;
 
@@ -88,10 +94,13 @@ io.on('connection', (socket: Socket) => {
 
     room.current = room.current ? 0 : 1;
 
+    console.log(`[${roomId}] Turn: Player ${room.current + 1}`);
+
     room.players[room.current].emit('te toca');
   });
 
   socket.on('disconnecting', () => {
+    console.log(`Socket disconnected: ${socket.id}`);
     const socketRooms = [...socket.rooms];
     socketRooms.forEach((r) => {
       if (!rooms[r]) return;
