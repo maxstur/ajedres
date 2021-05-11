@@ -98,9 +98,7 @@ class Board {
     const [xPrev, yPrev] = prev;
     const [xNext, yNext] = next;
 
-    console.log({
-      xPrev, yPrev, xNext, yNext,
-    });
+    this.clearSelections();
 
     const selectedCell = this.boardMatrix[xNext][yNext];
     const previousCell = this.boardMatrix[xPrev][yPrev];
@@ -111,6 +109,7 @@ class Board {
 
     previousCell.piece.moved = true;
     previousCell.setPiece(null);
+    previousCell.setSelected(true);
     this.previousCell = null;
     selectedCell.setSelected(true);
 
