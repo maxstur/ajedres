@@ -1,5 +1,8 @@
+import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server, Socket as SocketBase } from 'socket.io';
+
+dotenv.config();
 
 const initialBoard = [
   ['br', 'bn', 'bb', 'bq', 'bk', 'bb', 'bn', 'br'],
@@ -24,10 +27,12 @@ interface Room {
 
 const rooms: Record<string, Room> = {};
 
+console.log(process.env.CORS_URL);
+
 const httpServer = createServer();
 const io = new Server(httpServer, {
   cors: {
-    origin: 'http://localhost:8080',
+    origin: process.env.CORS_URL,
     methods: ['GET', 'POST'],
   },
 });
