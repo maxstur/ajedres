@@ -54,9 +54,11 @@ io.on('connection', (socket: Socket) => {
       };
     }
 
-    rooms[roomId].players.push(socket);
-    socket.join(roomId);
+    if (rooms[roomId].players.length < 2) {
+      rooms[roomId].players.push(socket);
+    }
 
+    socket.join(roomId);
     socket.emit('init board', rooms[roomId].board);
 
     if (rooms[roomId].players.length === 2) {
@@ -105,6 +107,7 @@ io.on('connection', (socket: Socket) => {
     socketRooms.forEach((r) => {
       if (!rooms[r]) return;
       rooms[r].players = rooms[r].players.filter((p) => p !== socket);
+      if (rooms[r].players.length === 0) delete rooms[r];
       io.to(r).emit('player left');
     });
   });
