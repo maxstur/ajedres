@@ -4,29 +4,29 @@ Ajedrez Online
 - Front
   - Tablero
     - Celda
-      - Seleccionar
-      - Celda de movimiento anterior
-      - Visualizar movimientos legales
-      - Visualizar una pieza
-      - Drag n Drop
+      [ok] Seleccionar
+      [ok] Celda de movimiento anterior
+      [ok] Visualizar movimientos legales
+      [ok] Visualizar una pieza
+      [ok] Drag n Drop
 
   - Fichas
     - 
-  - Logica de movimientos
-    - Legales
-    - Ilegales
-  - Maquina de estado
+  [ok] Logica de movimientos
+    [ok] Legales
+    [ok] Ilegales
+  [ok] Maquina de estado
   - A11y
     - Jugadas con teclado
     - Voz con jugadas
 
 - Back
-  - Setup Sockets
+  [ok] Setup Sockets
   - Game Logic
-    - Setup del Tablero
-    - Cliente informa movimiento
+    [ok] Setup del Tablero
+    [ok] Cliente informa movimiento
     - Servidor valida movimiento e informa a los clientes
-    - Servidor informa a quién le toca
-  - Salas
-  - Deploy
+    [ok] Servidor informa a quién le toca
+  [ok] Salas
+  [ok] Deploy
   - 
